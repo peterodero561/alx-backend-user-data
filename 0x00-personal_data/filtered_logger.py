@@ -79,3 +79,32 @@ def get_db() -> MySQLConnection:
             database=db_name
             )
     return connection
+
+
+def main() -> None:
+    '''retrives all rows in users table and logs each row with
+    sensitive information obfuscated'''
+
+    # get logger to obfuscate sensitive fields
+    logger = get_logger()
+
+    # connect to database
+    db: MySQLConnection = get_db()
+    cursor = db.cursor()
+
+    # query usere table
+    cursor.execute('SELECT * FROM users;')
+    columns = [desc[0] for desc in cursor.description]
+
+    for row in cursor:
+        row_dict = dict(zip(columns, row))
+        msg = '; '.join([f'{key}={value}' for key, value in row_dict.items()])
+        logger.info(msg)
+
+    # close db connection
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
