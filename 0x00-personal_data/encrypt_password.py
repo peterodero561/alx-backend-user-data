@@ -2,6 +2,7 @@
 '''Encrypt user set passwords'''
 import bcrypt
 
+
 def hash_password(password: str) -> bytes:
     '''function to encrypt password and return salted hashed password'''
     # salt password
