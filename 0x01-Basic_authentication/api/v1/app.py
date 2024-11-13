@@ -58,7 +58,6 @@ def before_request():
         return
     # check if the request needs authorization
     if auth.require_auth(request.path, excluded_paths):
-        #return
         # check if request authorization
         if auth.authorization_header(request) is None:
             abort(401)
