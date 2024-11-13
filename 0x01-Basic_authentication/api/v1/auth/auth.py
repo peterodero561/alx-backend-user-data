@@ -7,7 +7,7 @@ from typing import List, TypeVar
 class Auth:
     '''Used for authentication of users'''
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        '''check for authorization inpath'''
+        '''check if path needs authorization'''
         if path is None:
             return True
         if not excluded_paths:
@@ -25,7 +25,9 @@ class Auth:
 
     def authorization_header(self, request=None) -> str:
         '''check for authorization in header of path'''
-        return None
+        if request is None:
+            return None
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
         '''check ceurrent user'''
