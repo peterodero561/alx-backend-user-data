@@ -8,7 +8,20 @@ class Auth:
     '''Used for authentication of users'''
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         '''check for authorization inpath'''
-        return False
+        if path is None:
+            return True
+        if not excluded_paths:
+            return True
+        # ensure path ends with slash
+        if not path.endswith('/'):
+            path += '/'
+        # check if path is in excluded paths
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('/'):
+                if path == excluded_path:
+                    return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         '''check for authorization in header of path'''
