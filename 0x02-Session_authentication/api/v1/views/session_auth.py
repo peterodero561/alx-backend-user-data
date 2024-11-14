@@ -3,7 +3,7 @@
 from api.v1.views import app_views
 from models.user import User
 import os
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, abort
 
 
 session_auth = Blueprint('session_auth', __name__)
@@ -39,3 +39,12 @@ def session_login():
     response.set_cookie(session_name, session_id)
 
     return response
+
+@app_views.route(
+        '/auth_session/logout', strict_slashes=False, methods=['DELETE'])
+def logout():
+    from api.v1.app import auth
+    bool_value = auth.destroy_session(request)
+    if bool_value is False:
+        return False, abort(404)
+    return jsonify({})
